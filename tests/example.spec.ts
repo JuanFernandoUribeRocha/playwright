@@ -18,3 +18,12 @@ test('get started link', async ({ page }) => {
 
   await page.pause();
 });
+
+test ('testAmazon', async ({page}) => {
+
+  await page.goto('https://www.amazon.com.mx');
+  await page.locator('input[id=\'twotabsearchtextbox\']').fill('Iphone 17');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('//span[contains(@class, \'a-button-text a-declarative\')]')).toBeVisible();
+  await page.pause();
+});
