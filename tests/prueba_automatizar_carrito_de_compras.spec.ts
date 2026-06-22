@@ -8,11 +8,9 @@ test("test_automatizar_carrito", async ({ page }) => {
   await page.getByRole("button", { name: "Login" }).click();
   //await page.pause();
 
-  //Obteniendo los datos esperados de un elemento random
+  //Obteniendo los datos esperados de un elemento random, recorriendo todos los items y seleccionando alguno random
 
-  const allItems = await page
-    .locator("#inventory-container .inventory-item")
-    .all();
+  const allItems = await page.locator(".inventory_item").all();
 
   console.log(`Cantidad de items: ${allItems.length}`);
 
@@ -20,6 +18,7 @@ test("test_automatizar_carrito", async ({ page }) => {
 
   const randomItem = allItems[randomIndex];
 
+  //Guardando los valores mostrados en la pantalla inicial 'expected'
   const expectedName = await randomItem
     .locator(".inventory_item_name")
     .innerText();
@@ -31,12 +30,30 @@ test("test_automatizar_carrito", async ({ page }) => {
     .innerText();
 
   console.log(
-    `expectedName: ${expectedName}, expectedDescription: ${expectedDescription}, expectedPrice: ${expectedPrice}`,
+    `expectedName: ${expectedName},\nexpectedDescription: ${expectedDescription}, \nexpectedPrice: ${expectedPrice}`,
   );
 
   await page
     .getByRole("button", { name: "Add to cart" })
     .nth(randomIndex)
     .click();
-  await page.getByRole("link", { name: "1" }).click();
+  await page.locator(".shopping_cart_link").click();
+
+  //Guardando los valores mostrados en el carrito 'actual'
+
+  const actualName = await page.locator(".inventory_item_name").innerText();
+  const actualDescription = await page
+    .locator(".inventory_item_desc")
+    .innerText();
+  const actualPrice = await page.locator(".inventory_item_price").innerText();
+
+  console.log(
+    `actualName: ${actualName},\nactualDescription: ${actualDescription}, \nactualPrice: ${actualPrice}`,
+  );
+
+  //Comparando valores 'actual' vs 'expected' para corroborar la igualdad
+
+  await expect(actualName).toEqual(expectedName);
+  await expect(actualDescription).toEqual(expectedDescription);
+  await expect(actualPrice).toEqual(expectedPrice);
 });
