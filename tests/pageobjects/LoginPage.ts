@@ -1,9 +1,10 @@
-import { Locator, Page } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
 
 export class LoginPage {
   private readonly usernameTextbox: Locator;
   private readonly passwordTextbox: Locator;
   private readonly loginButton: Locator;
+  private readonly shoppingCartContainer: Locator;
 
   /*
 El constructor es lo primero que se va a invocar, aquí se contruirá todo lo relacionado a la localización de los elementos.
@@ -12,6 +13,7 @@ El constructor es lo primero que se va a invocar, aquí se contruirá todo lo re
     this.usernameTextbox = page.getByRole("textbox", { name: "Username" });
     this.passwordTextbox = page.getByRole("textbox", { name: "Password" });
     this.loginButton = page.getByRole("button", { name: "Login" });
+    this.shoppingCartContainer = page.locator(".shopping_cart_container");
   }
 
   /*
@@ -34,5 +36,9 @@ Métodos
     await this.fillUsername(username);
     await this.fillPassword(password);
     await this.clickOnLogin();
+  }
+
+  async checkSuccessfullLogin() {
+    await expect(this.shoppingCartContainer).toBeVisible();
   }
 }

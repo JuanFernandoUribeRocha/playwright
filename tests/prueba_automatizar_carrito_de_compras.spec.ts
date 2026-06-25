@@ -114,6 +114,7 @@ test("test_automatizar_carrito_pageobject", async ({ page }) => {
   const login = new LoginPage(page);
 
   await login.loginWithCredentials("standard_user", "secret_sauce");
+  await login.checkSuccessfullLogin();
 
   //Obteniendo los datos esperados de un elemento random, recorriendo todos los items y seleccionando alguno random
 
